@@ -14,6 +14,8 @@ import {
 import { mockContacts, type Contact, type ContactStatus } from '@/lib/mocks/contacts'
 import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AddContactDialog } from '@/components/add-contact-dialog'
+import { toast } from 'sonner'
 
 type SortField = 'name' | 'email' | 'company' | 'status'
 type SortDirection = 'asc' | 'desc' | null
@@ -26,6 +28,7 @@ const statusColors: Record<ContactStatus, string> = {
 }
 
 export function Contacts() {
+  const [contacts, setContacts] = useState<Contact[]>(mockContacts)
   const [searchQuery, setSearchQuery] = useState('')
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>(null)
@@ -45,8 +48,20 @@ export function Contacts() {
     }
   }
 
+  const handleAddContact = (newContact: Omit<Contact, 'id' | 'createdAt'>) => {
+    const contact: Contact = {
+      ...newContact,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+    }
+    setContacts((prev) => [contact, ...prev])
+    toast.success('Contact added successfully', {
+      description: `${contact.name} has been added to your contacts.`,
+    })
+  }
+
   const filteredAndSortedContacts = useMemo(() => {
-    let result = [...mockContacts]
+    let result = [...contacts]
 
     // Filter by search query
     if (searchQuery) {
@@ -74,7 +89,7 @@ export function Contacts() {
     }
 
     return result
-  }, [searchQuery, sortField, sortDirection])
+  }, [contacts, searchQuery, sortField, sortDirection])
 
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) {
@@ -96,10 +111,15 @@ export function Contacts() {
 
         <Card>
           <CardHeader>
-            <CardTitle>All Contacts</CardTitle>
-            <CardDescription>
-              {filteredAndSortedContacts.length} contact{filteredAndSortedContacts.length !== 1 ? 's' : ''} found
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>All Contacts</CardTitle>
+                <CardDescription>
+                  {filteredAndSortedContacts.length} contact{filteredAndSortedContacts.length !== 1 ? 's' : ''} found
+                </CardDescription>
+              </div>
+              <AddContactDialog onAddContact={handleAddContact} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4">
