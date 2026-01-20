@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useNavigate } from 'react-router-dom'
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 const revenueData = [
   { month: 'Jan', revenue: 32450 },
@@ -21,10 +21,25 @@ const revenueData = [
   { month: 'Dec', revenue: 55230 },
 ]
 
+const leadSourcesData = [
+  { source: 'Website', leads: 456, fill: 'hsl(239 84% 67%)' },
+  { source: 'Referral', leads: 312, fill: 'hsl(200 80% 60%)' },
+  { source: 'Social Media', leads: 278, fill: 'hsl(280 65% 65%)' },
+  { source: 'Email Campaign', leads: 189, fill: 'hsl(160 70% 55%)' },
+  { source: 'Direct', leads: 145, fill: 'hsl(45 90% 60%)' },
+  { source: 'Partner', leads: 98, fill: 'hsl(340 75% 65%)' },
+]
+
 const chartConfig = {
   revenue: {
     label: 'Revenue',
     color: 'hsl(239 84% 67%)',
+  },
+}
+
+const leadSourcesChartConfig = {
+  leads: {
+    label: 'Leads',
   },
 }
 
@@ -130,6 +145,44 @@ export function Dashboard() {
                   fill="url(#revenueGradient)"
                 />
               </AreaChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Lead Sources</CardTitle>
+            <CardDescription>Distribution of leads by acquisition channel</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={leadSourcesChartConfig} className="h-[350px] w-full">
+              <BarChart data={leadSourcesData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis
+                  dataKey="source"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  className="text-xs"
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  className="text-xs"
+                />
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent
+                      formatter={(value) => [`${value} leads`, 'Total']}
+                    />
+                  }
+                />
+                <Bar
+                  dataKey="leads"
+                  radius={[8, 8, 0, 0]}
+                />
+              </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
