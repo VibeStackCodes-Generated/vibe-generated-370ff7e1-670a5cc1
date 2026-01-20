@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from '@/lib/auth-context'
 import { ProtectedRoute } from '@/components/protected-route'
 import { Login } from '@/routes/login'
 import { Dashboard } from '@/routes/dashboard'
+import { Contacts } from '@/routes/contacts'
 
 function RootRedirect() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -32,6 +33,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <ProtectedRoute>
+                <Contacts />
               </ProtectedRoute>
             }
           />
