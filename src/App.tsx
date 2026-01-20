@@ -6,6 +6,7 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { Login } from '@/routes/login'
 import { Dashboard } from '@/routes/dashboard'
 import { Contacts } from '@/routes/contacts'
+import { Pipeline } from '@/routes/pipeline'
 
 function RootRedirect() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -41,6 +42,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Contacts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pipeline"
+            element={
+              <ProtectedRoute>
+                <Pipeline />
               </ProtectedRoute>
             }
           />
