@@ -69,7 +69,7 @@ interface KanbanColumnProps {
   totalValue: number
 }
 
-function KanbanColumn({ title, description, deals, stage, totalValue }: KanbanColumnProps) {
+function KanbanColumn({ title, description, deals, totalValue }: KanbanColumnProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 space-y-1">
