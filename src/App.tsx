@@ -7,6 +7,7 @@ import { Login } from '@/routes/login'
 import { Dashboard } from '@/routes/dashboard'
 import { Contacts } from '@/routes/contacts'
 import { Pipeline } from '@/routes/pipeline'
+import { Settings } from '@/routes/settings'
 
 function RootRedirect() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -50,6 +51,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Pipeline />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             }
           />
