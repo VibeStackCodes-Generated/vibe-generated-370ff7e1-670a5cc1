@@ -1,19 +1,46 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
 import { VibeStackBadge } from '@/components/vibestack-badge'
-import { AppLayout } from '@/components/layout/app-layout'
+import { AuthProvider, useAuth } from '@/lib/auth-context'
+import { ProtectedRoute } from '@/components/protected-route'
+import { Login } from '@/routes/login'
+import { Dashboard } from '@/routes/dashboard'
+
+function RootRedirect() {
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    )
+  }
+
+  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />
+}
 
 function App() {
   return (
-    <>
-      <AppLayout>
-        <div className="space-y-4">
-          <h1 className="text-3xl font-bold">Welcome to CRM</h1>
-          <p className="text-muted-foreground">Your dashboard overview will appear here.</p>
-        </div>
-      </AppLayout>
-      <Toaster position="bottom-right" />
-      <VibeStackBadge />
-    </>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Toaster position="bottom-right" />
+        <VibeStackBadge />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
